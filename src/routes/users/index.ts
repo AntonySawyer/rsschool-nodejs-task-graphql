@@ -73,24 +73,37 @@ const plugin: FastifyPluginAsyncJsonSchemaToTs = async (
 
       try {
         const deletedUser = await fastify.db.users.delete(userToDeleteId);
-        const shouldUnsubscribeUserIds = deletedUser.subscribedToUserIds;
 
-        // TODO: fix "cascade" unsubscribing
-        for await (const userId of shouldUnsubscribeUserIds) {
-          const userUnsubscribeFrom = await fastify.db.users.findOne({
-            equals: userId,
-            key: 'id'
-          });
+        const profileToDelete = await fastify.db.profiles.findOne({
+          equals: deletedUser.id,
+          key: 'userId',
+        });
 
-          console.log('userUnsubscribeFrom?.subscribedToUserIds: ', userUnsubscribeFrom?.subscribedToUserIds);
+        const postsToDelete = await fastify.db.posts.findMany({
+          equals: deletedUser.id,
+          key: 'userId',
+        });
 
-          const modifiedSubscribeIds = userUnsubscribeFrom?.subscribedToUserIds.filter((id) => (
+
+        const usersToUnsubscribe = await fastify.db.users.findMany({
+          key: 'subscribedToUserIds',
+          inArray: deletedUser.id,
+        });
+
+        if (profileToDelete) {
+          await fastify.db.profiles.delete(profileToDelete.id);
+        }
+
+        for await (const post of postsToDelete) {
+          await fastify.db.posts.delete(post.id);
+        }
+
+        for await (const user of usersToUnsubscribe) {
+          const modifiedSubscribeIds = user.subscribedToUserIds.filter((id) => (
             id !== userToDeleteId
           ));
 
-          console.log('modifiedSubscribeIds: ', modifiedSubscribeIds);
-
-          await fastify.db.users.change(userId, {
+          await fastify.db.users.change(user.id, {
             subscribedToUserIds: modifiedSubscribeIds
           });
         }
@@ -111,35 +124,35 @@ const plugin: FastifyPluginAsyncJsonSchemaToTs = async (
       },
     },
     async function (request, reply): Promise<UserEntity | void> {
-      const { id: originalUserId } = request.params;
-      const { userId: subscribeToUserId } = request.body;
+      const { id: idUserSubscribeTo } = request.params;
+      const { userId: idUserWhoSubscribe } = request.body;
 
       try {
-        const originalUser = await fastify.db.users.findOne({
-          equals: originalUserId,
+        const userSubscribeTo = await fastify.db.users.findOne({
+          equals: idUserSubscribeTo,
           key: 'id'
         });
 
-        const subscribeToUser = await fastify.db.users.findOne({
-          equals: subscribeToUserId,
+        const userWhoSubscribe = await fastify.db.users.findOne({
+          equals: idUserWhoSubscribe,
           key: 'id'
         });
 
-        if (!subscribeToUser || !originalUser) {
+        if (!userWhoSubscribe || !userSubscribeTo) {
           reply.notFound();
 
           return;
         }
 
-        const existedSubscribeToIds = subscribeToUser.subscribedToUserIds ?? [];
+        const existedSubscribeToIds = userWhoSubscribe.subscribedToUserIds ?? [];
         const updatedUserSubscribeIds = [...existedSubscribeToIds];
 
-        if (!existedSubscribeToIds.includes(originalUserId)) {
-          updatedUserSubscribeIds.push(originalUserId);
+        if (!existedSubscribeToIds.includes(idUserSubscribeTo)) {
+          updatedUserSubscribeIds.push(idUserSubscribeTo);
         }
 
-        const updatedUser = await fastify.db.users.change(subscribeToUserId, {
-          subscribedToUserIds: updatedUserSubscribeIds
+        const updatedUser = await fastify.db.users.change(idUserWhoSubscribe, {
+          subscribedToUserIds: updatedUserSubscribeIds,
         });
 
         return updatedUser;
