@@ -50,6 +50,7 @@ const plugin: FastifyPluginAsyncJsonSchemaToTs = async (
     },
     async function (request, reply): Promise<UserEntity | void> {
       const newUserRequest = request.body;
+
       try {
         const newUser = await fastify.db.users.create(newUserRequest);
 
