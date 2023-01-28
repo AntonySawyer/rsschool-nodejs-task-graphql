@@ -3,6 +3,7 @@ import { graphql, GraphQLObjectType, GraphQLSchema } from 'graphql';
 import { GraphQlContext } from './context';
 
 import { graphqlBodySchema } from './schema';
+import { getMemberTypeFields } from './schema/memberType';
 import { getPostFields } from './schema/post';
 
 const plugin: FastifyPluginAsyncJsonSchemaToTs = async (
@@ -19,7 +20,8 @@ const plugin: FastifyPluginAsyncJsonSchemaToTs = async (
       const QueryType = new GraphQLObjectType<unknown, GraphQlContext>({
         name: 'Query',
         fields: {
-          ...getPostFields()
+          ...getPostFields(),
+          ...getMemberTypeFields(),
         },
       });
 
@@ -32,7 +34,7 @@ const plugin: FastifyPluginAsyncJsonSchemaToTs = async (
         reply,
       };
 
-      const result = graphql({        
+      const result = graphql({
         schema,
         source: request.body.query as string,
         contextValue: graphQlContext
