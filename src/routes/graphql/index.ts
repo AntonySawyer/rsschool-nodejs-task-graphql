@@ -3,9 +3,10 @@ import { graphql, GraphQLObjectType, GraphQLSchema } from 'graphql';
 import { GraphQlContext } from './context';
 
 import { graphqlBodySchema } from './schema';
-import { getMemberTypeFields } from './schema/memberType';
-import { getPostFields } from './schema/post';
+import { getMemberTypeFields } from './schema/memberTypes';
+import { getPostFields } from './schema/posts';
 import { getProfileFields } from './schema/profiles';
+import { getUserFields } from './schema/users';
 
 const plugin: FastifyPluginAsyncJsonSchemaToTs = async (
   fastify
@@ -24,6 +25,7 @@ const plugin: FastifyPluginAsyncJsonSchemaToTs = async (
           ...getPostFields(),
           ...getMemberTypeFields(),
           ...getProfileFields(),
+          ...getUserFields(),
         },
       });
 
