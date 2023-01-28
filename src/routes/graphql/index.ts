@@ -5,6 +5,7 @@ import { GraphQlContext } from './context';
 import { graphqlBodySchema } from './schema';
 import { getMemberTypeFields } from './schema/memberType';
 import { getPostFields } from './schema/post';
+import { getProfileFields } from './schema/profiles';
 
 const plugin: FastifyPluginAsyncJsonSchemaToTs = async (
   fastify
@@ -22,6 +23,7 @@ const plugin: FastifyPluginAsyncJsonSchemaToTs = async (
         fields: {
           ...getPostFields(),
           ...getMemberTypeFields(),
+          ...getProfileFields(),
         },
       });
 

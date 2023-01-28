@@ -49,18 +49,18 @@ const getFieldSingleMemberTypeById = (): GraphQLFieldConfig<unknown, GraphQlCont
     const { id } = args;
     const { fastify, reply } = context;
 
-    const post = await fastify.db.memberTypes.findOne({
+    const memberType = await fastify.db.memberTypes.findOne({
       equals: id,
       key: 'id',
     });
 
-    if (!post) {
+    if (!memberType) {
       reply.badRequest()
 
       return;
     }
 
-    return post;
+    return memberType;
   }
 });
 
