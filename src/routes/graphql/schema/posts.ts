@@ -58,7 +58,7 @@ const getFieldSinglePostById = (): GraphQLFieldConfig<unknown, GraphQlContext, P
     });
 
     if (!post) {
-      reply.badRequest()
+      reply.badRequest();
 
       return;
     }
