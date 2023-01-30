@@ -226,7 +226,9 @@ mutation {
 
 ```graphql
 mutation {
-
+  updatePost(data: { id: "$ID", title: "New Title" }) {
+    id
+  }
 }
 ```
 
