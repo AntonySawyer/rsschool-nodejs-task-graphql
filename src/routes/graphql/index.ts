@@ -1,7 +1,7 @@
 import { FastifyPluginAsyncJsonSchemaToTs } from '@fastify/type-provider-json-schema-to-ts';
-import { graphql, GraphQLObjectType, GraphQLSchema } from 'graphql';
-import { GraphQlContext } from './context';
+import { graphql, GraphQLObjectType, GraphQLSchema, validate, parse } from 'graphql';
 
+import { GraphQlContext } from './context';
 import { graphqlBodySchema } from './schema';
 import { getMemberTypeMutatuionFields } from './schema/memberType/memberTypeMutation';
 import { getMemberTypeQueryFields } from './schema/memberType/memberTypesQuery';
@@ -11,6 +11,7 @@ import { getProfileMutatuionFields } from './schema/profile/profilesMutation';
 import { getProfileQueryFields } from './schema/profile/profilesQuery';
 import { getUserMutatuionFields } from './schema/user/usersMutation';
 import { getUserQueryFields } from './schema/user/usersQuery';
+import { getGraphQlValidationRules } from './validation/getGraphQlValidationRules';
 
 const plugin: FastifyPluginAsyncJsonSchemaToTs = async (
   fastify
@@ -23,6 +24,14 @@ const plugin: FastifyPluginAsyncJsonSchemaToTs = async (
       },
     },
     async function (request, reply) {
+      const { query } = request.body;
+
+      if (!query) { 
+        reply.badRequest();
+
+        return;
+      }
+
       const QueryType = new GraphQLObjectType<unknown, GraphQlContext>({
         name: 'Query',
         fields: {
@@ -47,6 +56,19 @@ const plugin: FastifyPluginAsyncJsonSchemaToTs = async (
         query: QueryType,
         mutation: MutationType
       });
+
+      const validationRules = getGraphQlValidationRules();
+      const queryForValidate = parse(query)
+
+      const queryErrors = validate(schema, queryForValidate, validationRules);
+
+      if (queryErrors.length > 0) {
+        const response = {
+          errors: queryErrors
+        };
+
+        return response;
+      }
 
       const graphQlContext: GraphQlContext = {
         fastify,

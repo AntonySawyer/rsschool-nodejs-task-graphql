@@ -4,6 +4,10 @@
 >
 > Go to [RequestExamples](./RequestExamples.md) link
 
+> ### Limit the complexity of the graphql queries
+>
+> Link and body example located in [this markdown file](./src/routes/graphql/validation/README.md) link
+
 ### Tasks:
 
 1. Add logic to the restful endpoints (users, posts, profiles, member-types folders in ./src/routes).  
