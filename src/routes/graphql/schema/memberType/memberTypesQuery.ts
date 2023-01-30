@@ -5,7 +5,7 @@ import {
   ThunkObjMap,
 } from "graphql";
 
-import { GraphQlContext } from "../context";
+import { GraphQlContext } from "../../context";
 import { MemberTypeType } from "./memberTypeType";
 
 type MemberTypeArgs = {

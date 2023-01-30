@@ -1,7 +1,7 @@
 import { GraphQLObjectType, GraphQLID, GraphQLInt } from "graphql";
 
-import { MemberTypeEntity } from "../../../utils/DB/entities/DBMemberTypes";
-import { GraphQlContext } from "../context";
+import { MemberTypeEntity } from "../../../../utils/DB/entities/DBMemberTypes";
+import { GraphQlContext } from "../../context";
 
 export const MemberTypeType = new GraphQLObjectType<MemberTypeEntity, GraphQlContext>({
   name: 'memberType',

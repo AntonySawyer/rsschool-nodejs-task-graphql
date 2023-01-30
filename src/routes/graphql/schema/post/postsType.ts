@@ -1,7 +1,7 @@
 import { GraphQLObjectType, GraphQLID, GraphQLString } from "graphql";
 
-import { PostEntity } from "../../../utils/DB/entities/DBPosts";
-import { GraphQlContext } from "../context";
+import { PostEntity } from "../../../../utils/DB/entities/DBPosts";
+import { GraphQlContext } from "../../context";
 
 export const PostType = new GraphQLObjectType<PostEntity, GraphQlContext>({
   name: 'post',

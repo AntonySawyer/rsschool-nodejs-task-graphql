@@ -1,10 +1,10 @@
 import { GraphQLObjectType, GraphQLID, GraphQLString, GraphQLList } from "graphql";
 
-import { UserEntity } from "../../../utils/DB/entities/DBUsers";
-import { GraphQlContext } from "../context";
-import { MemberTypeType } from "./memberTypeType";
-import { PostType } from "./postsType";
-import { ProfileType } from "./profilesType";
+import { UserEntity } from "../../../../utils/DB/entities/DBUsers";
+import { GraphQlContext } from "../../context";
+import { MemberTypeType } from "../memberType/memberTypeType";
+import { PostType } from "../post/postsType";
+import { ProfileType } from "../profile/profilesType";
 
 export const UserType: GraphQLObjectType<UserEntity, GraphQlContext> = new GraphQLObjectType<UserEntity, GraphQlContext>({
   name: 'user',

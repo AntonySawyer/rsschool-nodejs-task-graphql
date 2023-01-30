@@ -3,11 +3,11 @@ import { graphql, GraphQLObjectType, GraphQLSchema } from 'graphql';
 import { GraphQlContext } from './context';
 
 import { graphqlBodySchema } from './schema';
-import { getMemberTypeQueryFields } from './schema/memberTypesQuery';
-import { getPostQueryFields } from './schema/postsQuery';
-import { getProfileQueryFields } from './schema/profilesQuery';
-import { getUserMutatuionFields } from './schema/usersMutation';
-import { getUserQueryFields } from './schema/usersQuery';
+import { getMemberTypeQueryFields } from './schema/memberType/memberTypesQuery';
+import { getPostQueryFields } from './schema/post/postsQuery';
+import { getProfileQueryFields } from './schema/profile/profilesQuery';
+import { getUserMutatuionFields } from './schema/user/usersMutation';
+import { getUserQueryFields } from './schema/user/usersQuery';
 
 const plugin: FastifyPluginAsyncJsonSchemaToTs = async (
   fastify

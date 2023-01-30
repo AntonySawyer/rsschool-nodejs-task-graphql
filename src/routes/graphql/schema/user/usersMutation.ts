@@ -1,7 +1,7 @@
 import { GraphQLFieldConfig, GraphQLString, ThunkObjMap } from "graphql";
 
-import { UserEntity } from "../../../utils/DB/entities/DBUsers";
-import { GraphQlContext } from "../context";
+import { UserEntity } from "../../../../utils/DB/entities/DBUsers";
+import { GraphQlContext } from "../../context";
 import { UserType } from "./usersType";
 
 type CreateUserArgs = Omit<UserEntity, 'id' | 'subscribedToUserIds'>;

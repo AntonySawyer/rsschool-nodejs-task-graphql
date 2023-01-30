@@ -1,7 +1,7 @@
 import { GraphQLObjectType, GraphQLID, GraphQLString, GraphQLInt } from "graphql";
 
-import { ProfileEntity } from "../../../utils/DB/entities/DBProfiles";
-import { GraphQlContext } from "../context";
+import { ProfileEntity } from "../../../../utils/DB/entities/DBProfiles";
+import { GraphQlContext } from "../../context";
 
 export const ProfileType = new GraphQLObjectType<ProfileEntity, GraphQlContext>({
   name: 'profile',
