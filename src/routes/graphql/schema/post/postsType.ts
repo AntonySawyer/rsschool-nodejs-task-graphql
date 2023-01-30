@@ -21,8 +21,8 @@ export const PostType = new GraphQLObjectType<PostEntity, GraphQlContext>({
   }
 });
 
-export const PostInputType = new GraphQLInputObjectType({
-  name: 'PostInput',
+export const CreatePostInputType = new GraphQLInputObjectType({
+  name: 'CreatePostInput',
   fields: {
     title: {
       type: new GraphQLNonNull(GraphQLString),

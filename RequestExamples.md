@@ -192,13 +192,19 @@ mutation {
 }
 ```
 
-## Update gql requests:
+## Update gql requests (usind `InputObjectType`):
 
 2.12. Update user.
 
+> **!** Replace `$ID` with real user `id`
+
 ```graphql
 mutation {
-
+  updateUser(
+    data: { id: "$ID", firstName: "First", email: "mail@example.com" }
+  ) {
+    id
+  }
 }
 ```
 
@@ -227,14 +233,6 @@ mutation {
 ```
 
 2.16. Subscribe to; unsubscribe from.
-
-```graphql
-mutation {
-
-}
-```
-
-2.17. [InputObjectType](https://graphql.org/graphql-js/type/#graphqlinputobjecttype) for DTOs.
 
 ```graphql
 mutation {

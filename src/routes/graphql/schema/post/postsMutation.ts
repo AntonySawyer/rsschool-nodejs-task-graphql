@@ -2,7 +2,7 @@ import { GraphQLFieldConfig, GraphQLNonNull, ThunkObjMap } from "graphql";
 
 import { PostEntity } from "../../../../utils/DB/entities/DBPosts";
 import { GraphQlContext } from "../../context";
-import { PostInputType, PostType } from "./postsType";
+import { CreatePostInputType, PostType } from "./postsType";
 
 type CreatePostArgs = {
   data: Omit<PostEntity, 'id'>;
@@ -12,7 +12,7 @@ const getFieldCreatePost = (): GraphQLFieldConfig<unknown, GraphQlContext, Creat
   type: PostType,
   args: {
     data: {
-      type: new GraphQLNonNull(PostInputType)
+      type: new GraphQLNonNull(CreatePostInputType)
     }
   },
   resolve: async (source, args, context) => {

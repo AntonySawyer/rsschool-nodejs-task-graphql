@@ -2,7 +2,7 @@ import { GraphQLFieldConfig, GraphQLNonNull, ThunkObjMap } from "graphql";
 
 import { ProfileEntity } from "../../../../utils/DB/entities/DBProfiles";
 import { GraphQlContext } from "../../context";
-import { ProfileInputType, ProfileType } from "./profilesType";
+import { CreateProfileInputType, ProfileType } from "./profilesType";
 
 type CreateProfileArgs = {
   data: Omit<ProfileEntity, 'id'>;
@@ -12,7 +12,7 @@ const getFieldCreateProfile = (): GraphQLFieldConfig<unknown, GraphQlContext, Cr
   type: ProfileType,
   args: {
     data: {
-      type: new GraphQLNonNull(ProfileInputType),
+      type: new GraphQLNonNull(CreateProfileInputType),
     }
   },
   resolve: async (source, args, context) => {

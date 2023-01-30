@@ -36,8 +36,8 @@ export const ProfileType = new GraphQLObjectType<ProfileEntity, GraphQlContext>(
   }
 });
 
-export const ProfileInputType = new GraphQLInputObjectType({
-  name: 'ProfileInput',
+export const CreateProfileInputType = new GraphQLInputObjectType({
+  name: 'CreateProfileInput',
   fields: {
     avatar: {
       type: new GraphQLNonNull(GraphQLString),

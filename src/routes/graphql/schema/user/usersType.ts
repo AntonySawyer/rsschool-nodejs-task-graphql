@@ -121,9 +121,8 @@ export const UserType: GraphQLObjectType<UserEntity, GraphQlContext> = new Graph
   })
 });
 
-
-export const UserInputType = new GraphQLInputObjectType({
-  name: 'UserInput',
+export const CreateUserInputType = new GraphQLInputObjectType({
+  name: 'CreateUserInput',
   fields: {
     firstName: {
       type: new GraphQLNonNull(GraphQLString),
@@ -133,6 +132,24 @@ export const UserInputType = new GraphQLInputObjectType({
     },
     email: {
       type: new GraphQLNonNull(GraphQLString),
+    },
+  }
+});
+
+export const UpdateUserInputType = new GraphQLInputObjectType({
+  name: 'UpdateUserInput',
+  fields: {
+    id: {
+      type: new GraphQLNonNull(GraphQLString),
+    },
+    firstName: {
+      type: GraphQLString,
+    },
+    lastName: {
+      type: GraphQLString,
+    },
+    email: {
+      type: GraphQLString,
     },
   }
 });
