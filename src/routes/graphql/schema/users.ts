@@ -101,6 +101,26 @@ const UserType: GraphQLObjectType<UserEntity, GraphQlContext> = new GraphQLObjec
 
         return userSubscribedToUsers;
       }
+    },
+    subscribedToUser: {
+      type: new GraphQLList(UserType),
+      resolve: async (source, args, context) => {
+        const { subscribedToUserIds } = source;
+        const { fastify } = context;
+
+        const subscribedToUser = [];
+
+        for await (const userId of subscribedToUserIds) {
+          const user = await fastify.db.users.findOne({
+            key: 'id',
+            equals: userId,
+          });
+
+          subscribedToUser.push(user);
+        }
+
+        return subscribedToUser;
+      }
     }
   })
 });
