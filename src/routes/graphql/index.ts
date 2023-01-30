@@ -3,6 +3,7 @@ import { graphql, GraphQLObjectType, GraphQLSchema } from 'graphql';
 import { GraphQlContext } from './context';
 
 import { graphqlBodySchema } from './schema';
+import { getMemberTypeMutatuionFields } from './schema/memberType/memberTypeMutation';
 import { getMemberTypeQueryFields } from './schema/memberType/memberTypesQuery';
 import { getPostMutatuionFields } from './schema/post/postsMutation';
 import { getPostQueryFields } from './schema/post/postsQuery';
@@ -38,6 +39,7 @@ const plugin: FastifyPluginAsyncJsonSchemaToTs = async (
           ...getUserMutatuionFields(),
           ...getProfileMutatuionFields(),
           ...getPostMutatuionFields(),
+          ...getMemberTypeMutatuionFields(),
         },
       });
 

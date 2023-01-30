@@ -236,7 +236,9 @@ mutation {
 
 ```graphql
 mutation {
-
+  updateMemberType(data: { id: "business", discount: 20 }) {
+    id
+  }
 }
 ```
 
