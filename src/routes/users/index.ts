@@ -84,7 +84,6 @@ const plugin: FastifyPluginAsyncJsonSchemaToTs = async (
           key: 'userId',
         });
 
-
         const usersToUnsubscribe = await fastify.db.users.findMany({
           key: 'subscribedToUserIds',
           inArray: deletedUser.id,

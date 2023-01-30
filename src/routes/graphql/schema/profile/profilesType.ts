@@ -7,7 +7,7 @@ export const ProfileType = new GraphQLObjectType<ProfileEntity, GraphQlContext>(
   name: 'profile',
   fields: {
     id: {
-      type: GraphQLID, // TODO: format: uuid
+      type: GraphQLID,
     },
     avatar: {
       type: GraphQLString,
@@ -31,7 +31,7 @@ export const ProfileType = new GraphQLObjectType<ProfileEntity, GraphQlContext>(
       type: GraphQLString,
     },
     userId: {
-      type: GraphQLString, // TODO: format: uuid
+      type: GraphQLString,
     }, 
   }
 });

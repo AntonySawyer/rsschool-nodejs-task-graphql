@@ -16,7 +16,7 @@ export const PostType = new GraphQLObjectType<PostEntity, GraphQlContext>({
       type: GraphQLString,
     },
     userId: {
-      type: GraphQLID, // TODO: format: uuid
+      type: GraphQLID,
     }
   }
 });

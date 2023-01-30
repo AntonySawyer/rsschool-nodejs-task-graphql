@@ -7,7 +7,7 @@ export const MemberTypeType = new GraphQLObjectType<MemberTypeEntity, GraphQlCon
   name: 'memberType',
   fields: {
     id: {
-      type: GraphQLID, // TODO: format: uuid
+      type: GraphQLID,
     },
     discount: {
       type: GraphQLInt,

@@ -1,3 +1,4 @@
+import * as DataLoader from 'dataloader';
 import { 
   GraphQLObjectType,
   GraphQLID,
@@ -7,6 +8,7 @@ import {
   GraphQLNonNull,
 } from "graphql";
 
+import { MemberTypeEntity } from '../../../../utils/DB/entities/DBMemberTypes';
 import { UserEntity } from "../../../../utils/DB/entities/DBUsers";
 import { GraphQlContext } from "../../context";
 import { MemberTypeType } from "../memberType/memberTypeType";
@@ -17,7 +19,7 @@ export const UserType: GraphQLObjectType<UserEntity, GraphQlContext> = new Graph
   name: 'user',
   fields: () => ({
     id: {
-      type: GraphQLID, // TODO: format: uuid
+      type: GraphQLID,
     },
     firstName: {
       type: GraphQLString,
@@ -68,18 +70,28 @@ export const UserType: GraphQLObjectType<UserEntity, GraphQlContext> = new Graph
         const profiles = await fastify.db.profiles.findMany({
           equals: userId,
           key: 'userId',
-        });
+        }) || [];
 
-        const memberTypes = [];
+        const memberTypeIds: string[] = profiles.map((profile) => (
+          profile.memberTypeId
+        ));
 
-        for await (const profile of profiles) {
+        const batchMemberTypeIds = async (memberTypeIds: string[]) => {
           const memberTypeForProfile = await fastify.db.memberTypes.findMany({
-            equals: profile.memberTypeId,
+            equalsAnyOf: memberTypeIds,
             key: 'id',
           });
 
-          memberTypes.push(memberTypeForProfile);
-        }
+          return memberTypeForProfile;
+        };
+
+        const memberTypeLoader = new DataLoader<string, MemberTypeEntity>((memberTypeIds) => (
+          batchMemberTypeIds(memberTypeIds as string[])
+        ));
+
+
+        const memberTypes = await memberTypeLoader.loadMany(memberTypeIds);
+
 
         return memberTypes;
       }
