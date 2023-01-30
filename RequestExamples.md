@@ -196,7 +196,7 @@ mutation {
 
 2.12. Update user.
 
-> **!** Replace `$ID` with real user `id`
+> **!** Replace `$ID` with real user `id`. Fell free to add other `user` fields for update.
 
 ```graphql
 mutation {
@@ -210,13 +210,19 @@ mutation {
 
 2.13. Update profile.
 
+> **!** Replace `$ID` with real profile `id`. Fell free to add other `profile` fields for update.
+
 ```graphql
 mutation {
-
+  updateProfile(data: { id: "$ID", country: "country1" }) {
+    id
+  }
 }
 ```
 
 2.14. Update post.
+
+> **!** Replace `$ID` with real post `id`. Fell free to add other `post` fields for update.
 
 ```graphql
 mutation {
