@@ -14,7 +14,8 @@ import { GraphQlContext } from "../context";
 type ProfileArgs = {
   id: string;
 }
-const ProfileType = new GraphQLObjectType<ProfileEntity, GraphQlContext>({
+
+export const ProfileType = new GraphQLObjectType<ProfileEntity, GraphQlContext>({
   name: 'profile',
   fields: {
     id: {

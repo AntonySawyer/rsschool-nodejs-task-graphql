@@ -45,14 +45,77 @@
 
   ```graphql
   query {
-
+    users {
+      id
+      posts {
+        id
+      }
+      profile {
+        id
+      }
+      memberTypes {
+        id
+      }
+    }
   }
   ```
 
-  2.4. Get user by id with his posts, profile, memberType.  
-   2.5. Get users with their `userSubscribedTo`, profile.  
-   2.6. Get user by id with his `subscribedToUser`, posts.  
-   2.7. Get users with their `userSubscribedTo`, `subscribedToUser` (additionally for each user in `userSubscribedTo`, `subscribedToUser` add their `userSubscribedTo`, `subscribedToUser`).
+  2.4. Get user by id with his posts, profile, memberType.
+
+  > **!** Replace `$ID` with real user `id`
+
+  ```graphql
+  query {
+    user(id: $ID) {
+      id
+      posts {
+        id
+      }
+      profile {
+        id
+      }
+      memberTypes {
+        id
+      }
+    }
+  }
+  ```
+
+  2.5. Get users with their `userSubscribedTo`, profile.
+
+  ```graphql
+  query {
+    users {
+      id
+      userSubscribedTo {
+        id
+        profile {
+          id
+        }
+      }
+    }
+  }
+  ```
+
+  2.6. Get user by id with his `subscribedToUser`, posts.
+
+  > **!** Replace `$ID` with real user `id`
+
+  ```graphql
+  query {
+    user(id: $ID) {
+      id
+      userSubscribedTo {
+        id
+        posts {
+          id
+        }
+      }
+    }
+  }
+  ```
+
+  2.7. Get users with their `userSubscribedTo`, `subscribedToUser` (additionally for each user in `userSubscribedTo`, `subscribedToUser` add their `userSubscribedTo`, `subscribedToUser`).
 
   - Create gql requests:  
     2.8. Create user.  

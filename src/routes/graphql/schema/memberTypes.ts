@@ -14,7 +14,8 @@ import { GraphQlContext } from "../context";
 type MemberTypeArgs = {
   id: string;
 }
-const MemberTypeType = new GraphQLObjectType<MemberTypeEntity, GraphQlContext>({
+
+export const MemberTypeType = new GraphQLObjectType<MemberTypeEntity, GraphQlContext>({
   name: 'memberType',
   fields: {
     id: {

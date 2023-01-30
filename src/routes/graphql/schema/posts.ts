@@ -14,7 +14,7 @@ type PostArgs = {
   id: string;
 }
 
-const PostType = new GraphQLObjectType<PostEntity, GraphQlContext>({
+export const PostType = new GraphQLObjectType<PostEntity, GraphQlContext>({
   name: 'post',
   fields: {
     id: {
