@@ -143,13 +143,15 @@ query {
 }
 ```
 
-## Create gql requests:
+## Create gql requests (using `InputObjectType`):
 
 2.8. Create user.
 
 ```graphql
 mutation {
-  createUser(firstName: "First", lastName: "Last", email: "mail@example.com") {
+  createUser(
+    data: { firstName: "First", lastName: "Last", email: "mail@example.com" }
+  ) {
     id
   }
 }
@@ -162,14 +164,16 @@ mutation {
 ```graphql
 mutation {
   createProfile(
-    avatar: "avatar"
-    sex: "sex"
-    birthday: 1
-    country: "country"
-    street: "street"
-    city: "city"
-    memberTypeId: "business"
-    userId: "$ID"
+    data: {
+      avatar: "avatar"
+      sex: "sex"
+      birthday: 1
+      country: "country"
+      street: "street"
+      city: "city"
+      memberTypeId: "business"
+      userId: "ID"
+    }
   ) {
     id
   }
@@ -178,17 +182,13 @@ mutation {
 
 2.10. Create post.
 
-```graphql
-mutation {
-
-}
-```
-
-2.11. [InputObjectType](https://graphql.org/graphql-js/type/#graphqlinputobjecttype) for DTOs.
+> **!** Replace `$ID` with real user `id`
 
 ```graphql
 mutation {
-
+  createPost(data: { title: "title", content: "content", userId: "id" }) {
+    id
+  }
 }
 ```
 

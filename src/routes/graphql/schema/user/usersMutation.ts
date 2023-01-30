@@ -1,26 +1,22 @@
-import { GraphQLFieldConfig, GraphQLString, ThunkObjMap } from "graphql";
+import { GraphQLFieldConfig, GraphQLNonNull, ThunkObjMap } from "graphql";
 
 import { UserEntity } from "../../../../utils/DB/entities/DBUsers";
 import { GraphQlContext } from "../../context";
-import { UserType } from "./usersType";
+import { UserInputType, UserType } from "./usersType";
 
-type CreateUserArgs = Omit<UserEntity, 'id' | 'subscribedToUserIds'>;
+type CreateUserArgs = {
+  data: Omit<UserEntity, 'id' | 'subscribedToUserIds'>;
+};
 
 const getFieldCreateUser = (): GraphQLFieldConfig<unknown, GraphQlContext, CreateUserArgs> => ({
   type: UserType,
   args: {
-    firstName: {
-      type: GraphQLString
-    },
-    lastName: {
-      type: GraphQLString
-    }, 
-    email: {
-      type: GraphQLString
-    },
+    data: {
+      type: new GraphQLNonNull(UserInputType)
+    }
   },
   resolve: async (source, args, context) => {
-    const newUserBody = args;
+    const { data: newUserBody } = args;
     const { fastify } = context;
 
     const createdUser = await fastify.db.users.create(newUserBody);

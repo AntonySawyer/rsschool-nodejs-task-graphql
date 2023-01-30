@@ -1,41 +1,22 @@
-import { GraphQLFieldConfig, GraphQLInt, GraphQLString, ThunkObjMap } from "graphql";
+import { GraphQLFieldConfig, GraphQLNonNull, ThunkObjMap } from "graphql";
 
 import { ProfileEntity } from "../../../../utils/DB/entities/DBProfiles";
 import { GraphQlContext } from "../../context";
-import { ProfileType } from "./profilesType";
+import { ProfileInputType, ProfileType } from "./profilesType";
 
-type CreateProfileArgs = Omit<ProfileEntity, 'id'>;
+type CreateProfileArgs = {
+  data: Omit<ProfileEntity, 'id'>;
+};
 
 const getFieldCreateProfile = (): GraphQLFieldConfig<unknown, GraphQlContext, CreateProfileArgs> => ({
   type: ProfileType,
   args: {
-    avatar: {
-      type: GraphQLString
-    },
-    sex: {
-      type: GraphQLString
-    },
-    birthday: {
-      type: GraphQLInt
-    },
-    country: {
-      type: GraphQLString
-    },
-    street: {
-      type: GraphQLString
-    },
-    city: {
-      type: GraphQLString
-    },
-    memberTypeId: {
-      type: GraphQLString
-    },
-    userId: {
-      type: GraphQLString
-    },
+    data: {
+      type: new GraphQLNonNull(ProfileInputType),
+    }
   },
   resolve: async (source, args, context) => {
-    const newProfileBody = args;
+    const { data: newProfileBody } = args;
     const { fastify } = context;
 
     const createdProfile = await fastify.db.profiles.create(newProfileBody);

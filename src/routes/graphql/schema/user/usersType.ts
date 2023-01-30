@@ -1,4 +1,11 @@
-import { GraphQLObjectType, GraphQLID, GraphQLString, GraphQLList } from "graphql";
+import { 
+  GraphQLObjectType,
+  GraphQLID,
+  GraphQLString,
+  GraphQLList,
+  GraphQLInputObjectType,
+  GraphQLNonNull,
+} from "graphql";
 
 import { UserEntity } from "../../../../utils/DB/entities/DBUsers";
 import { GraphQlContext } from "../../context";
@@ -112,4 +119,20 @@ export const UserType: GraphQLObjectType<UserEntity, GraphQlContext> = new Graph
       }
     }
   })
+});
+
+
+export const UserInputType = new GraphQLInputObjectType({
+  name: 'UserInput',
+  fields: {
+    firstName: {
+      type: new GraphQLNonNull(GraphQLString),
+    },
+    lastName: {
+      type: new GraphQLNonNull(GraphQLString),
+    },
+    email: {
+      type: new GraphQLNonNull(GraphQLString),
+    },
+  }
 });
