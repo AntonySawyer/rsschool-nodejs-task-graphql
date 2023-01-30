@@ -3,10 +3,11 @@ import { graphql, GraphQLObjectType, GraphQLSchema } from 'graphql';
 import { GraphQlContext } from './context';
 
 import { graphqlBodySchema } from './schema';
-import { getMemberTypeFields } from './schema/memberTypes';
-import { getPostFields } from './schema/posts';
-import { getProfileFields } from './schema/profiles';
-import { getUserFields } from './schema/users';
+import { getMemberTypeQueryFields } from './schema/memberTypesQuery';
+import { getPostQueryFields } from './schema/postsQuery';
+import { getProfileQueryFields } from './schema/profilesQuery';
+import { getUserMutatuionFields } from './schema/usersMutation';
+import { getUserQueryFields } from './schema/usersQuery';
 
 const plugin: FastifyPluginAsyncJsonSchemaToTs = async (
   fastify
@@ -22,15 +23,23 @@ const plugin: FastifyPluginAsyncJsonSchemaToTs = async (
       const QueryType = new GraphQLObjectType<unknown, GraphQlContext>({
         name: 'Query',
         fields: {
-          ...getPostFields(),
-          ...getMemberTypeFields(),
-          ...getProfileFields(),
-          ...getUserFields(),
+          ...getPostQueryFields(),
+          ...getMemberTypeQueryFields(),
+          ...getProfileQueryFields(),
+          ...getUserQueryFields(),
+        },
+      });
+
+      const MutationType = new GraphQLObjectType<unknown, GraphQlContext>({
+        name: 'Mutation',
+        fields: {
+          ...getUserMutatuionFields(),
         },
       });
 
       const schema = new GraphQLSchema({
         query: QueryType,
+        mutation: MutationType
       });
 
       const graphQlContext: GraphQlContext = {

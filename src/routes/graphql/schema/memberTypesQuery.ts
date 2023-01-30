@@ -1,34 +1,16 @@
 import { 
   GraphQLFieldConfig,
-  GraphQLID,
-  GraphQLInt,
   GraphQLList,
-  GraphQLObjectType,
   GraphQLString,
   ThunkObjMap,
 } from "graphql";
 
-import { MemberTypeEntity } from "../../../utils/DB/entities/DBMemberTypes";
 import { GraphQlContext } from "../context";
+import { MemberTypeType } from "./memberTypeType";
 
 type MemberTypeArgs = {
   id: string;
 }
-
-export const MemberTypeType = new GraphQLObjectType<MemberTypeEntity, GraphQlContext>({
-  name: 'memberType',
-  fields: {
-    id: {
-      type: GraphQLID, // TODO: format: uuid
-    },
-    discount: {
-      type: GraphQLInt,
-    },
-    monthPostsLimit: {
-      type: GraphQLInt,
-    },
-  }
-});
 
 const getFieldAllMemberTypes = (): GraphQLFieldConfig<unknown, GraphQlContext> => ({
   type: new GraphQLList<typeof MemberTypeType>(MemberTypeType),
@@ -65,7 +47,7 @@ const getFieldSingleMemberTypeById = (): GraphQLFieldConfig<unknown, GraphQlCont
   }
 });
 
-export const getMemberTypeFields = (): ThunkObjMap<GraphQLFieldConfig<unknown, GraphQlContext>> => ({
+export const getMemberTypeQueryFields = (): ThunkObjMap<GraphQLFieldConfig<unknown, GraphQlContext>> => ({
   memberTypes: getFieldAllMemberTypes(),
   memberType: getFieldSingleMemberTypeById()
 });

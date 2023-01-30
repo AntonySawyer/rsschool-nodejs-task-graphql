@@ -1,36 +1,16 @@
 import { 
   GraphQLFieldConfig,
-  GraphQLID,
   GraphQLList,
-  GraphQLObjectType,
   GraphQLString,
   ThunkObjMap,
 } from "graphql";
 
-import { PostEntity } from "../../../utils/DB/entities/DBPosts";
 import { GraphQlContext } from "../context";
+import { PostType } from "./postsType";
 
 type PostArgs = {
   id: string;
 }
-
-export const PostType = new GraphQLObjectType<PostEntity, GraphQlContext>({
-  name: 'post',
-  fields: {
-    id: {
-      type: GraphQLID,
-    },
-    title: {
-      type: GraphQLString,
-    },
-    content: {
-      type: GraphQLString,
-    },
-    userId: {
-      type: GraphQLID, // TODO: format: uuid
-    }
-  }
-});
 
 const getFieldAllPosts = (): GraphQLFieldConfig<unknown, GraphQlContext> => ({
   type: new GraphQLList<typeof PostType>(PostType),
@@ -67,7 +47,7 @@ const getFieldSinglePostById = (): GraphQLFieldConfig<unknown, GraphQlContext, P
   }
 });
 
-export const getPostFields = (): ThunkObjMap<GraphQLFieldConfig<unknown, GraphQlContext>> => ({
+export const getPostQueryFields = (): ThunkObjMap<GraphQLFieldConfig<unknown, GraphQlContext>> => ({
   posts: getFieldAllPosts(),
   post: getFieldSinglePostById()
 });

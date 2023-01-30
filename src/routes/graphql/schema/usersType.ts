@@ -1,23 +1,12 @@
-import { 
-  GraphQLFieldConfig,
-  GraphQLID,
-  GraphQLList,
-  GraphQLObjectType,
-  GraphQLString,
-  ThunkObjMap,
-} from "graphql";
+import { GraphQLObjectType, GraphQLID, GraphQLString, GraphQLList } from "graphql";
 
 import { UserEntity } from "../../../utils/DB/entities/DBUsers";
 import { GraphQlContext } from "../context";
-import { MemberTypeType } from "./memberTypes";
-import { PostType } from "./posts";
-import { ProfileType } from "./profiles";
+import { MemberTypeType } from "./memberTypeType";
+import { PostType } from "./postsType";
+import { ProfileType } from "./profilesType";
 
-type UserArgs = {
-  id: string;
-}
-
-const UserType: GraphQLObjectType<UserEntity, GraphQlContext> = new GraphQLObjectType<UserEntity, GraphQlContext>({
+export const UserType: GraphQLObjectType<UserEntity, GraphQlContext> = new GraphQLObjectType<UserEntity, GraphQlContext>({
   name: 'user',
   fields: () => ({
     id: {
@@ -123,44 +112,4 @@ const UserType: GraphQLObjectType<UserEntity, GraphQlContext> = new GraphQLObjec
       }
     }
   })
-});
-
-const getFieldAllUsers = (): GraphQLFieldConfig<unknown, GraphQlContext> => ({
-  type: new GraphQLList<typeof UserType>(UserType),
-  resolve: async (source, args, context, info) => {
-    const { fastify } = context;
-
-    const users = await fastify.db.users.findMany();
-
-    return users;
-  }
-});
-
-const getFieldSingleUserById = (): GraphQLFieldConfig<unknown, GraphQlContext, UserArgs> => ({
-  type: UserType,
-  args: {
-    id: { type: GraphQLString }
-  },
-  resolve: async (source, args, context, info) => {
-    const { id } = args;
-    const { fastify, reply } = context;
-
-    const user = await fastify.db.users.findOne({
-      equals: id,
-      key: 'id',
-    });
-
-    if (!user) {
-      reply.badRequest()
-
-      return;
-    }
-
-    return user;
-  }
-});
-
-export const getUserFields = (): ThunkObjMap<GraphQLFieldConfig<unknown, GraphQlContext>> => ({
-  users: getFieldAllUsers(),
-  user: getFieldSingleUserById(),
 });

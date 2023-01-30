@@ -1,52 +1,16 @@
 import { 
   GraphQLFieldConfig,
-  GraphQLID,
-  GraphQLInt,
   GraphQLList,
-  GraphQLObjectType,
   GraphQLString,
   ThunkObjMap,
 } from "graphql";
 
-import { ProfileEntity } from "../../../utils/DB/entities/DBProfiles";
 import { GraphQlContext } from "../context";
+import { ProfileType } from "./profilesType";
 
 type ProfileArgs = {
   id: string;
 }
-
-export const ProfileType = new GraphQLObjectType<ProfileEntity, GraphQlContext>({
-  name: 'profile',
-  fields: {
-    id: {
-      type: GraphQLID, // TODO: format: uuid
-    },
-    avatar: {
-      type: GraphQLString,
-    },
-    sex: {
-      type: GraphQLString,
-    },
-    birthday: {
-      type: GraphQLInt,
-    },
-    country: {
-      type: GraphQLString,
-    },
-    street: {
-      type: GraphQLString,
-    },
-    city: {
-      type: GraphQLString,
-    },
-    memberTypeId: {
-      type: GraphQLString,
-    },
-    userId: {
-      type: GraphQLString, // TODO: format: uuid
-    }, 
-  }
-});
 
 const getFieldAllProfiles = (): GraphQLFieldConfig<unknown, GraphQlContext> => ({
   type: new GraphQLList<typeof ProfileType>(ProfileType),
@@ -83,7 +47,7 @@ const getFieldSingleProfileById = (): GraphQLFieldConfig<unknown, GraphQlContext
   }
 });
 
-export const getProfileFields = (): ThunkObjMap<GraphQLFieldConfig<unknown, GraphQlContext>> => ({
+export const getProfileQueryFields = (): ThunkObjMap<GraphQLFieldConfig<unknown, GraphQlContext>> => ({
   profiles: getFieldAllProfiles(),
   profile: getFieldSingleProfileById(),
 });
