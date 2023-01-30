@@ -2,7 +2,7 @@ import { GraphQLFieldConfig, GraphQLNonNull, ThunkObjMap } from "graphql";
 
 import { UserEntity } from "../../../../utils/DB/entities/DBUsers";
 import { GraphQlContext } from "../../context";
-import { CreateUserInputType, UpdateUserInputType, UserType } from "./usersType";
+import { CreateUserInputType, SubscribeUserToInputType, UnubscribeUserFromInputType, UpdateUserInputType, UserType } from "./usersType";
 
 type CreateUserArgs = {
   data: Omit<UserEntity, 'id' | 'subscribedToUserIds'>;
@@ -10,6 +10,20 @@ type CreateUserArgs = {
 
 type UpdateUserArgs = {
   data: Omit<UserEntity, 'subscribedToUserIds'>;
+};
+
+type SubscribeUserArgs = {
+  data: {
+    whoSubscribeId: string;
+    subscribeToId: string;
+  };
+};
+
+type UnsubscribeUserArgs = {
+  data: {
+    whoUnsubscribeId: string;
+    unsubscribeFromId: string;
+  }
 };
 
 const getFieldCreateUser = (): GraphQLFieldConfig<unknown, GraphQlContext, CreateUserArgs> => ({
@@ -63,7 +77,91 @@ const getFieldUpdateUser = (): GraphQLFieldConfig<unknown, GraphQlContext, Updat
   },
 });
 
+const getFieldSubscribeUser = (): GraphQLFieldConfig<unknown, GraphQlContext, SubscribeUserArgs> => ({
+  type: UserType,
+  args: {
+    data: {
+      type: SubscribeUserToInputType
+    }
+  },
+  resolve: async (source, args, context) => {
+    const { subscribeToId, whoSubscribeId } = args.data;
+    const { fastify, reply } = context;
+
+    const userSubscribeTo = await fastify.db.users.findOne({
+      equals: subscribeToId,
+      key: 'id',
+    });
+
+    const userWhoSubscribe = await fastify.db.users.findOne({
+      equals: whoSubscribeId,
+      key: 'id',
+    });
+
+    if (!userSubscribeTo || !userWhoSubscribe) {
+      reply.badRequest();
+
+      return;
+    }
+
+    const existedSubscribeToIds = userWhoSubscribe.subscribedToUserIds ?? [];
+    const updatedUserSubscribeIds = [...existedSubscribeToIds];
+
+    if (!existedSubscribeToIds.includes(subscribeToId)) {
+      updatedUserSubscribeIds.push(subscribeToId);
+    }
+
+    const updatedUserWhoSubscribed = await fastify.db.users.change(whoSubscribeId, {
+      subscribedToUserIds: updatedUserSubscribeIds,
+    });
+
+    return updatedUserWhoSubscribed;
+  },
+});
+
+const getFieldUnsubscribeUser = (): GraphQLFieldConfig<unknown, GraphQlContext, UnsubscribeUserArgs> => ({
+  type: UserType,
+  args: {
+    data: {
+      type: UnubscribeUserFromInputType
+    }
+  },
+  resolve: async (source, args, context) => {
+    const { unsubscribeFromId, whoUnsubscribeId } = args.data;
+    const { fastify, reply } = context;
+
+    const userWhoUnsubscribe = await fastify.db.users.findOne({
+      equals: whoUnsubscribeId,
+      key: 'id',
+    });
+
+    const userUnsubscribeFrom = await fastify.db.users.findOne({
+      equals: unsubscribeFromId,
+      key: 'id',
+    });
+
+    if (!userWhoUnsubscribe || !userUnsubscribeFrom) {
+      reply.badRequest();
+
+      return;
+    }
+
+    const existedSubscribeToIds = userWhoUnsubscribe.subscribedToUserIds ?? [];
+    const updatedUserSubscribeIds = existedSubscribeToIds.filter((id) => (
+      id !== unsubscribeFromId
+    ));
+
+    const updatedUserWhoUnsubscribed = await fastify.db.users.change(whoUnsubscribeId, {
+      subscribedToUserIds: updatedUserSubscribeIds,
+    });
+
+    return updatedUserWhoUnsubscribed;
+  },
+});
+
 export const getUserMutatuionFields = (): ThunkObjMap<GraphQLFieldConfig<unknown, GraphQlContext>> => ({
   createUser: getFieldCreateUser(),
   updateUser: getFieldUpdateUser(),
+  subscribeUser: getFieldSubscribeUser(),
+  unSubscribeUser: getFieldUnsubscribeUser(),
 });

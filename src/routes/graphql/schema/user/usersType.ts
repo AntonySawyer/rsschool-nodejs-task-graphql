@@ -153,3 +153,27 @@ export const UpdateUserInputType = new GraphQLInputObjectType({
     },
   }
 });
+
+export const SubscribeUserToInputType = new GraphQLInputObjectType({
+  name: 'SubscribeUserToInput',
+  fields: {
+    whoSubscribeId: {
+      type: new GraphQLNonNull(GraphQLString),
+    },
+    subscribeToId: {
+      type: new GraphQLNonNull(GraphQLString),
+    },
+  }
+});
+
+export const UnubscribeUserFromInputType = new GraphQLInputObjectType({
+  name: 'UnubscribeUserFromInput',
+  fields: {
+    whoUnsubscribeId: {
+      type: new GraphQLNonNull(GraphQLString),
+    },
+    unsubscribeFromId: {
+      type: new GraphQLNonNull(GraphQLString),
+    },
+  }
+});

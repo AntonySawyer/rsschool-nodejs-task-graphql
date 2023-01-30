@@ -244,8 +244,24 @@ mutation {
 
 2.16. Subscribe to; unsubscribe from.
 
+- Subscribe:
+  > **!** Replace `$ID1` and `$ID2` with real users `id`.
+
 ```graphql
 mutation {
+  subscribeUser(data: { whoSubscribeId: "$ID1", subscribeToId: "$ID2" }) {
+    id
+  }
+}
+```
 
+- Unsubscribe:
+  > **!** Replace `$ID1` and `$ID2` with real users `id`.
+
+```graphql
+mutation {
+  subscribeUser(data: { whoUnsubscribeId: "$ID1", unsubscribeFromId: "$ID2" }) {
+    id
+  }
 }
 ```
