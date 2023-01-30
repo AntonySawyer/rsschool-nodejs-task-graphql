@@ -157,9 +157,22 @@ mutation {
 
 2.9. Create profile.
 
+> **!** Replace `$ID` with real user `id`
+
 ```graphql
 mutation {
-
+  createProfile(
+    avatar: "avatar"
+    sex: "sex"
+    birthday: 1
+    country: "country"
+    street: "street"
+    city: "city"
+    memberTypeId: "business"
+    userId: "$ID"
+  ) {
+    id
+  }
 }
 ```
 

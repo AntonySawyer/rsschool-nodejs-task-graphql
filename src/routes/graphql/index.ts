@@ -5,6 +5,7 @@ import { GraphQlContext } from './context';
 import { graphqlBodySchema } from './schema';
 import { getMemberTypeQueryFields } from './schema/memberType/memberTypesQuery';
 import { getPostQueryFields } from './schema/post/postsQuery';
+import { getProfileMutatuionFields } from './schema/profile/profilesMutation';
 import { getProfileQueryFields } from './schema/profile/profilesQuery';
 import { getUserMutatuionFields } from './schema/user/usersMutation';
 import { getUserQueryFields } from './schema/user/usersQuery';
@@ -34,6 +35,7 @@ const plugin: FastifyPluginAsyncJsonSchemaToTs = async (
         name: 'Mutation',
         fields: {
           ...getUserMutatuionFields(),
+          ...getProfileMutatuionFields(),
         },
       });
 
